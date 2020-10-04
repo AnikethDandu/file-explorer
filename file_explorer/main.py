@@ -1,29 +1,27 @@
-from tkinter import *
-from tkinter.ttk import *
+import tkinter
+import tkinter.ttk as ttk
 import file_explorer.commands as commands
+import os
+import pathlib
 
 
-class Application(Frame):
+class Application(ttk.Frame):
     def __init__(self, master=None):
         super().__init__(master)
-        self.pack()
 
-        self.widgets = []
+        self.main_frame = ttk.Frame(master, padding="2.5 0 10 10")
+        self.main_frame.grid(column=0, row=0)
 
-        self.cancel_button = Button(self, text='Cancel')
-        self.widgets.append(self.cancel_button)
+        self.cancel_button = ttk.Button(self.main_frame, text='Close')
+        self.cancel_button.grid(column=2, row=2)
 
-        self.pack_widgets()
         self.assign_commands()
 
     def assign_commands(self):
         self.cancel_button['command'] = commands.cancel(self=self)
 
-    def pack_widgets(self):
-        for widget in self.widgets:
-            widget.pack()
 
-
-root = Tk()
+root = tkinter.Tk()
+root.title('File Explorer')
 application = Application(master=root)
 application.mainloop()

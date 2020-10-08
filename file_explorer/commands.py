@@ -1,10 +1,6 @@
-from tkinter import *
-from tkinter.ttk import *
-
-
 def cancel(self):
     return lambda: self.master.destroy()
 
 
-def set_selected_path(value):
-    return lambda: print(value)
+def open_directory(path):
+    return open(file=path, mode='r') if path[-3:] == '.txt' else print(f'Open directory: {path}')

@@ -26,20 +26,14 @@ class Application(ttk.Frame):
         self.assign_commands()
 
     def show_path(self):
-        indices = {}
         for directory in self.current_directories:
             directory_index = self.current_directories.index(directory)
-            indices[directory] = directory_index
-            tkinter.Radiobutton(self.main_frame, text=directory, indicatoron=0, value=indices[directory],
-                                command=lambda: self.set_selected_path(indices[directory]))\
+            tkinter.Radiobutton(self.main_frame, text=directory, indicatoron=0, value=directory_index,
+                                command=commands.set_selected_path(directory_index))\
                 .grid(column=1, row=directory_index, columnspan=3, sticky=tkinter.W)
 
     def assign_commands(self):
         self.cancel_button['command'] = commands.cancel(self=self)
-
-    def set_selected_path(self, value):
-        self.selected_path = value
-        print(self.selected_path)
 
 
 root = tkinter.Tk()

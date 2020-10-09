@@ -1,21 +1,23 @@
 import os
+import pathlib
+from typing import Any
 
 
 def cancel(self):
     return lambda: self.master.destroy()
 
 
-def return_directories(path):
+def return_directories(path: pathlib.Path) -> list:
     return list(directory for directory in os.listdir(path))
 
 
-def open_directory(directory, master):
+def open_directory(directory: str, master) -> Any:
     master.starting_path = master.starting_path.joinpath(directory)
     return open(file=directory, mode='r') \
         if directory[-3:] == '.txt' else set_list(master, return_directories(path=master.starting_path))
 
 
-def set_list(master, value,):
+def set_list(master, value: list) -> None:
     master.destroy_directory_widgets()
     master.current_directories = value
     master.show_path()

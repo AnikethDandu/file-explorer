@@ -25,7 +25,7 @@ class Application(ttk.Frame):
 
         self.assign_commands()
 
-    def show_path(self):
+    def show_path(self) -> None:
         count = 0
         for directory in self.current_directories:
             if directory[0:1] != '.':
@@ -36,12 +36,12 @@ class Application(ttk.Frame):
                 directory_button.grid(column=1, row=count, columnspan=3, sticky=tkinter.W)
                 self.current_directory_widgets.append(directory_button)
 
-    def assign_commands(self):
+    def assign_commands(self) -> None:
         self.cancel_button['command'] = commands.cancel(self=self)
         self.open_button['command'] = lambda: commands.open_directory(self.current_directories[self.selected_path.get()]
                                                                       , self)
 
-    def destroy_directory_widgets(self):
+    def destroy_directory_widgets(self) -> None:
         [button.destroy() for button in self.current_directory_widgets]
 
 

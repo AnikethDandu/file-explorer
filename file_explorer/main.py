@@ -26,12 +26,15 @@ class Application(ttk.Frame):
         self.assign_commands()
 
     def show_path(self):
+        count = 0
         for directory in self.current_directories:
-            directory_index = self.current_directories.index(directory)
-            directory_button = tkinter.Radiobutton(self.main_frame, text=directory, indicatoron=0,
-                                                   value=directory_index, variable=self.selected_path)
-            directory_button.grid(column=1, row=directory_index, columnspan=3, sticky=tkinter.W)
-            self.current_directory_widgets.append(directory_button)
+            if directory[0:1] != '.':
+                count += 1
+                directory_index = self.current_directories.index(directory)
+                directory_button = tkinter.Radiobutton(self.main_frame, text=directory, indicatoron=0,
+                                                       value=directory_index, variable=self.selected_path)
+                directory_button.grid(column=1, row=count, columnspan=3, sticky=tkinter.W)
+                self.current_directory_widgets.append(directory_button)
 
     def assign_commands(self):
         self.cancel_button['command'] = commands.cancel(self=self)

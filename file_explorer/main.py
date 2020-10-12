@@ -17,7 +17,7 @@ import file_explorer.commands as commands
 
 class Application(ttk.Frame):
     """
-    Creates a ttk Frame widget and populates it with navigation buttons and a list of directories based on current path
+    Creates a Canvas widget and populates it with navigation buttons and a list of directories based on current path
 
     METHODS:
         show_path
@@ -28,13 +28,13 @@ class Application(ttk.Frame):
         :ivar selected_path: index of selected directory RadioButton
         :type selected_path: tkinter.IntVar()
         :ivar current_directory_widgets: list of all RadioButton widgets corresponding to each directory at current path
-        :type current_directory_widgets: list of tkinter.Button
+        :type current_directory_widgets: list of tkinter.RadioButton
         :ivar starting_path: root path
         :type starting_path: pathlib.Path
         :ivar current_directories: list of all current directories available at current path
         :type current_directories: list of str
-        :ivar main_frame: frame that is master widget for all other widgets
-        :type main_frame: ttk.Frame
+        :ivar main_canvas: Canvas that is master widget for all other widgets
+        :type main_canvas: tkinter.Canvas
         :ivar open_button: button to open directory or file
         :type open_button: ttk.Button
         :ivar close_button: button to close application
@@ -57,13 +57,13 @@ class Application(ttk.Frame):
 
         self.master.rowconfigure(2, weight=1)
 
-        self.main_frame = ttk.Frame(master)
-        self.main_frame.grid(column=0, row=0, sticky=tkinter.NSEW)
+        self.main_canvas = tkinter.Canvas(master, width=500, height=500)
+        self.main_canvas.grid(column=0, row=0, sticky=tkinter.NSEW)
 
-        self.open_button = ttk.Button(self.main_frame, text='Open')
+        self.open_button = ttk.Button(self.main_canvas, text='Open')
         self.open_button.grid(column=3, row=3)
 
-        self.close_button = ttk.Button(self.main_frame, text='Close')
+        self.close_button = ttk.Button(self.main_canvas, text='Close')
         self.close_button.grid(column=3, row=2, padx=(2.5, 5))
 
         self.assign_commands()
@@ -80,7 +80,7 @@ class Application(ttk.Frame):
             if directory[0:1] != '.':
                 count += 1
                 directory_index = self.current_directories.index(directory)
-                directory_button = tkinter.Radiobutton(self.main_frame, text=directory, indicatoron=0,
+                directory_button = tkinter.Radiobutton(self.main_canvas, text=directory, indicatoron=0,
                                                        value=directory_index, variable=self.selected_path)
                 directory_button.grid(column=1, row=count, columnspan=3, sticky=tkinter.W)
                 self.current_directory_widgets.append(directory_button)

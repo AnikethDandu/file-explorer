@@ -59,8 +59,8 @@ def open_directory(directory: str, application) -> Any:
     """
 
     application.starting_path = application.starting_path.joinpath(directory)
-    return open(file=directory, mode='r') \
-        if directory[-3:] == '.txt' else set_list(application, return_directories(path=application.starting_path))
+    return open(file=application.starting_path, mode='r') \
+        if directory[-4:] == '.txt' else set_list(application, return_directories(path=application.starting_path))
 
 
 def set_list(application, directories: list) -> None:

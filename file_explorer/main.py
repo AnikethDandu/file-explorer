@@ -35,6 +35,8 @@ class Application(ttk.Frame):
         :type current_directories: list of str
         :ivar main_canvas: Canvas that is master widget for all other widgets
         :type main_canvas: tkinter.Canvas
+        :ivar button_frame: Frame for navigation buttons
+        :type button_frame: tkinter.Frame
         :ivar open_button: button to open directory or file
         :type open_button: ttk.Button
         :ivar close_button: button to close application
@@ -55,16 +57,29 @@ class Application(ttk.Frame):
         self.starting_path = pathlib.Path.home()
         self.current_directories = commands.return_directories(self.starting_path)
 
-        self.master.rowconfigure(2, weight=1)
+        self.master = tkinter.Frame(master)
+        self.master.grid()
+        self.master.rowconfigure(0, weight=1)
+        self.master.rowconfigure(1, weight=1)
+        self.master.columnconfigure(0, weight=1)
+        self.master.columnconfigure(1, weight=1)
 
-        self.main_canvas = tkinter.Canvas(master, width=500, height=500)
-        self.main_canvas.grid(column=0, row=0, sticky=tkinter.NSEW)
+        self.main_canvas = tkinter.Canvas(self.master)
+        self.main_canvas.grid(column=1, row=0, sticky=tkinter.NSEW)
+        self.main_canvas.rowconfigure(0, weight=1)
 
-        self.open_button = ttk.Button(self.main_canvas, text='Open')
-        self.open_button.grid(column=3, row=3)
+        self.button_frame = tkinter.Frame(self.master)
+        self.button_frame.grid(column=1, row=1, sticky=tkinter.NSEW)
+        self.button_frame.rowconfigure(0, weight=1)
+        self.button_frame.rowconfigure(1, weight=1)
+        self.button_frame.columnconfigure(0, weight=0)
+        self.button_frame.columnconfigure(1, weight=0)
 
-        self.close_button = ttk.Button(self.main_canvas, text='Close')
-        self.close_button.grid(column=3, row=2, padx=(2.5, 5))
+        self.open_button = ttk.Button(self.button_frame, text='Open')
+        self.open_button.grid(column=0, row=1, sticky=tkinter.EW)
+
+        self.close_button = ttk.Button(self.button_frame, text='Close')
+        self.close_button.grid(column=0, row=0, sticky=tkinter.EW)
 
         self.assign_commands()
 
@@ -92,7 +107,7 @@ class Application(ttk.Frame):
         :return:None
         :rtype: None
         """
-        self.close_button['command'] = commands.cancel(application=self)
+        self.close_button['command'] = commands.cancel(application=self.master)
         self.open_button['command'] = lambda: commands.open_directory(self.current_directories[self.selected_path.get()]
                                                                       , self)
 

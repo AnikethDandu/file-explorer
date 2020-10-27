@@ -37,6 +37,8 @@ class Application(ttk.Frame):
         :type open_button: ttk.Button
         :ivar close_button: button to close application
         :type close_button: ttk.Button
+        :ivar scroll_bar: Scroll bar for directories in Canvas widget
+        :type scroll_bar: tkinter.Scrollbar
     """
 
     def __init__(self, master=None):
@@ -60,16 +62,20 @@ class Application(ttk.Frame):
         self.master.columnconfigure(0, weight=1)
         self.master.columnconfigure(1, weight=1)
 
-        self.main_canvas = tkinter.Canvas(self.master)
-        self.main_canvas.grid(column=1, row=0, sticky=tkinter.NSEW)
+        self.scroll_bar = tkinter.Scrollbar(master, orient=tkinter.VERTICAL)
+        self.scroll_bar.grid(row=0, column=1, sticky=tkinter.NSEW)
+
+        self.master.bind("<Configure>",
+                         lambda x: self.main_canvas.configure(scrollregion=self.main_canvas.bbox(tkinter.ALL)))
+
+        self.main_canvas = tkinter.Canvas(self.master, yscrollcommand=self.scroll_bar.set)
+        self.main_canvas.grid(column=0, row=0, sticky=tkinter.NSEW)
         self.main_canvas.rowconfigure(0, weight=1)
 
+        self.scroll_bar.configure(command=self.main_canvas.yview)
+
         self.button_frame = tkinter.Frame(self.master)
-        self.button_frame.grid(column=1, row=1, sticky=tkinter.NSEW)
-        self.button_frame.rowconfigure(0, weight=1)
-        self.button_frame.rowconfigure(1, weight=1)
-        self.button_frame.columnconfigure(0, weight=0)
-        self.button_frame.columnconfigure(1, weight=0)
+        self.button_frame.grid(column=0, row=1, sticky=tkinter.NSEW)
 
         self.open_button = ttk.Button(self.button_frame, text='Open')
         self.open_button.grid(column=0, row=1, sticky=tkinter.EW)
@@ -95,7 +101,7 @@ class Application(ttk.Frame):
                 directory_index = self.current_directories.index(directory)
                 directory_button = tkinter.Radiobutton(self.main_canvas, text=directory, indicatoron=0,
                                                        value=directory_index, variable=self.selected_path)
-                directory_button.grid(column=1, row=count, columnspan=3, sticky=tkinter.W)
+                self.main_canvas.create_window(50, count*25, window=directory_button)
                 self.current_directory_widgets.append(directory_button)
 
     def assign_commands(self) -> None:
